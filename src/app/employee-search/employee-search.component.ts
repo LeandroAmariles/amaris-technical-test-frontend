@@ -11,26 +11,19 @@ import Swal from 'sweetalert2'
 export class EmployeeSearchComponent implements OnInit {
 
 
-employees: Employee[] = [];
+  employees: Employee[] = [];
+  employee: Employee | null = null;
+  currentPage: number = 1;
+  itemsPerPage: number = 3;
+  employeeId: number | null = null;
+  errorMessage: string = '';
 
-employee: any = null;
 
-employeeAnnualCalculate: any = null;
-
-currentPage: number = 1;
-
-itemsPerPage: number = 3;
-
-employeeId: number = 0;
-
-employeeIdForCalculation: number = 0;
-
-errorMessage: string = '';
 
   constructor(private employeeService: EmployeeService) { }
 
   ngOnInit(): void {
-    this.getEmployees();
+
   }
 
   getEmployees():void {
@@ -41,27 +34,24 @@ errorMessage: string = '';
       
   }
 
-  getEmployeeById():void {
-    this.employeeService.getEmployeeById(this.employeeId).subscribe({
-      next: (data) => this.employee = data,
-      error: (error)  => this.errorMessage = 'Employee dont found'
-    })
+  searchEmployee(): void {
+    if (this.employeeId === null || this.employeeId === 0) {
+      this.employee = null; 
+      this.getEmployees(); 
+    } else {
+      this.employeeService.getEmployeeById(this.employeeId).subscribe({
+        next: (data) => this.employee = data,
+        error: (error) => {
+          this.employee = null; 
+          this.errorMessage = 'Employee not found';
+        }
+      });
+    }
   }
 
-  caluculateEmployeeAnnualSalary():void {
-    this.employeeService.calculateEmployeeAnnualSalary(this.employeeIdForCalculation).subscribe({
-      next: (employee) => {
-        if (employee.status === 'UP') this.employeeAnnualCalculate = employee;
-       else {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "The employee was found but the status is not UP",
-        });
-      }
-    },
-      error: (error) => this.errorMessage = 'Employee dont found'
-    })
+
+  calculateAnnualSalary(salary: number): number {
+    return salary * 12; // Assuming monthly salary to annual salary conversion
   }
 
   changePage(page: number) {

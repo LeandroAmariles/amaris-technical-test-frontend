@@ -1,39 +1,43 @@
 <div class="container mt-3">
-  <h2>Search employee by id</h2>
+  <h2>Search Employee by ID</h2>
   <div class="mb-3">
     <input type="number" [(ngModel)]="employeeId" placeholder="ID de empleado" class="form-control" />
-    <button (click)="getEmployeeById()" class="btn btn-primary mt-2">Search</button>
+    <button (click)="searchEmployee()" class="btn btn-primary mt-2">Search</button>
   </div>
 
   <div *ngIf="employee">
     <h3>Employee found:</h3>
-    <p><strong>Name:</strong> {{employee.data.employeeName}}</p>
-    <p><strong>Salary:</strong> {{employee.data.employeeSalary}}</p>
-    <p><strong>Age:</strong> {{employee.data.employeeAge}}</p>
+    <p><strong>Name:</strong> {{employee.firstName}}</p>
+    <p><strong>Salary:</strong> {{employee.salary}}</p>
+    <p><strong>Age:</strong> {{employee.age}}</p>
   </div>
 
   <div *ngIf="errorMessage" class="alert alert-danger">
     {{errorMessage}}
   </div>
 
-  <h2 class="mt-5">Employees list</h2>
+  <h2 class="mt-5">Employees List</h2>
   <table class="table table-striped">
     <thead>
       <tr>
         <th>ID</th>
-        <th>Name</th>
+        <th>First Name</th>
+        <th>Last Name</th>
         <th>Salary</th>
         <th>Age</th>
-        <th>Status</th>
+        <th>Email</th>
+        <th>Annual Salary</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let e of paginatedEmployees">
         <td>{{ e.id }}</td>
-        <td>{{ e.data?.employeeName }}</td>
-        <td>{{ e.data?.employeeSalary }}</td>
-        <td>{{ e.data?.employeeAge }}</td>
-        <td>{{e.status}}</td>
+        <td>{{ e.firstName }}</td>
+        <td>{{ e.lastName }}</td>
+        <td>{{ e.salary }}</td>
+        <td>{{e.age}}</td>
+        <td>{{e.email}}</td>
+        <td>{{calculateAnnualSalary(e.salary)}}</td>
       </tr>
     </tbody>
   </table>
@@ -51,20 +55,4 @@
       </li>
     </ul>
   </nav>
-  <h2> Calculate employee annualSalary</h2>
-  <div class="mb-3">
-    <input type="number" [(ngModel)]="employeeIdForCalculation" placeholder="ID de empleado" class="form-control" />
-    <button (click)="caluculateEmployeeAnnualSalary()" class="btn btn-primary mt-2">Search</button>
-  </div>
-  <div *ngIf="employeeAnnualCalculate">
-    <h3>Employee found:</h3>
-    <p><strong>Name:</strong> {{employeeAnnualCalculate.data.employeeName}}</p>
-    <p><strong>Salary:</strong> {{employeeAnnualCalculate.data.employeeSalary}}</p>
-    <p><strong>Age:</strong> {{employeeAnnualCalculate.data.employeeAge}}</p>
-    <p><strong>Annual Salary: </strong>{{employeeAnnualCalculate.data.annualSalary}}</p>
-  </div>
-
-  <div *ngIf="errorMessage" class="alert alert-danger">
-    {{errorMessage}}
-  </div>
 </div>
